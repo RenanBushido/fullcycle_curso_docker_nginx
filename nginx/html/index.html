@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Cycle</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/script.js" defer></script>
+</head>
+
+<body onload="obterTodosNomes();">
+    <header>
+        <h1>Full Cycle Rocks</h1>
+    </header>
+    <section>
+        <div>
+            <label for="cadNome">Cadastrar Nome</label>
+            <input type="text" name="cadNome" id="cadNome" placeholder="Insira um novo nome" required>
+            <input type="button" onclick="cadastrarNome();" value="Cadastrar">
+        </div>
+    </section>
+    <section>
+        <h1>Nomes</h1>
+        <p id="Obterloading">Carregando...</p>
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Lista de Nomes</th>
+                    </tr>
+                </thead>
+                <tbody id="lista"></tbody>
+            </table>
+        </div>
+    </section>
+</body>
+
+</html>
