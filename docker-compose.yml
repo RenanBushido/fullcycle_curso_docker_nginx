@@ -1,18 +1,18 @@
-version: "3.4"
+version: '3.8'
 services:
 
     fullcycle_db:
         build:
           context: ./mysql
           dockerfile: Dockerfile
-        image: renan79/fullcycle_db:prod
+        image: renan79/fullcycle_db:prod        
         command: --innodb-use-native-aio=0
         container_name: fullcycle_db
         restart: always
         tty: true
         volumes:
-          - ./mysql/data/:/var/lib/mysql
-          - ./mysql/dump/:/docker-entrypoint-initdb.d/
+          - mysql-data:/var/lib/mysql
+          - mysql-dump:/docker-entrypoint-initdb.d/
         environment:
           - MYSQL_ROOT_PASSWORD=docker
           - MYSQL_USER=docker
@@ -27,12 +27,14 @@ services:
         build: 
           context: ./node
           dockerfile: Dockerfile.prod
-        image: renan79/fullcycle_app:prod
+        image: renan79/fullcycle_app:prod        
         container_name: fullcycle_app
+        entrypoint: dockerize -wait tcp://fullcycle_db:3306 -timeout 20s docker-entrypoint.sh
+        command: sh -c "npm install & npm start"
+        volumes:
+          - app:/usr/src/app
         depends_on:
           - fullcycle_db
-        ports:
-          - "3000:3000"
         networks:
           - fullcycle_net
 
@@ -40,11 +42,8 @@ services:
         build:
           context: ./nginx
           dockerfile: Dockerfile.prod
-        image: renan79/fullcycle_nginx:prod
-        container_name: fullcycle_nginx
-        depends_on: 
-          - fullcycle_app
-          - fullcycle_db
+        image: renan79/fullcycle_nginx:prod        
+        container_name: fullcycle_nginx        
         ports:
           - "8080:80"
         networks:
@@ -52,4 +51,10 @@ services:
     
 networks:
   fullcycle_net:
+    name: fullcycle_net
     driver: bridge
+
+volumes:
+  mysql-data:
+  mysql-dump:
+  app:

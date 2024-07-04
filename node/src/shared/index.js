@@ -25,7 +25,7 @@ app.get('/', (req, res) => {
 
 app.get('/listar', (req, res) => {
 
-    conexao.query('SELECT * FROM tb_people;', (err, results) => {
+    conexao.query('SELECT * FROM tb_people', (err, results) => {
         if(err) {
             throw err
         }
@@ -47,7 +47,7 @@ app.post('/', (req, res) => {
     
         res.status(201).json({
             Mensagem: 'Nome incluído com sucesso.'
-        })    
+        })
     } catch (error) {
         res.status(500).json({
             Mensagem: 'Ocorreu um erro na aplicacao.'
